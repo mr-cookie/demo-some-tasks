@@ -77,8 +77,8 @@ namespace Tools{
     private function isPartOfWord($position, $text){
       if (strlen($text) <= $position)
         return false;
-      $letter = $this->getCharInPosition($position, $text);
-      return $this->isLetter($letter); 
+      $char = $this->getCharInPosition($position, $text);
+      return $this->isLetter($char); 
     }
   }
 }
