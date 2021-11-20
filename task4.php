@@ -1,7 +1,7 @@
 <?php
 /*  Задание: Из массива из 100 элементов требуется вывести кол-во последовательных пар одинаковых элементов
  * */
-function findQuantitySequencePairs(&$destArr, &$srcMapCounterPairs){
+function findQuantitySequencePairs(&$inputArr, &$destMapCounterPairs){
   $idx = 0;
   while ($idx < count($destArr)){
     $next = null; 
