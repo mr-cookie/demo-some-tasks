@@ -3,17 +3,17 @@
  * */
 function findQuantitySequencePairs(&$inputArr, &$destMapCounterPairs){
   $idx = 0;
-  while ($idx < count($destArr)){
+  while ($idx < count($inputArr)){
     $next = null; 
-    if ($idx + 1 < count($destArr))
-      $next = $destArr[$idx+1];
+    if ($idx + 1 < count($inputArr))
+      $next = $inputArr[$idx+1];
 
-    if ($destArr[$idx] == $next){
-      $key = $destArr[$idx];
-      if (!array_key_exists($key, $srcMapCounterPairs))
-        $srcMapCounterPairs[$key] = 0;
-      $srcMapCounterPairs[$key]++;
-      //$idx++;
+    if ($inputArr[$idx] == $next){
+      $key = $inputArr[$idx];
+      if (!array_key_exists($key, $destMapCounterPairs))
+        $destMapCounterPairs[$key] = 0;
+      $destMapCounterPairs[$key]++;
+      $idx++;
     }
     $idx++;
   }
