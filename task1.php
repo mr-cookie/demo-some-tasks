@@ -21,10 +21,10 @@ namespace Domain\Entity {
 }
 
 // Сначала реализуем интерфейс инструмента обрезателя 
-namespace Utility{
+namespace Tools{
 
   interface ICutter{
-    function cropText(string $text): string;
+    function crop(&$src, &$dest);
   }
 
   class DefaultCutter implements ICutter{
@@ -35,11 +35,10 @@ namespace Utility{
       $this->letterLimit = $letterLimit;
     }
 
-    public function cropText(string $text): string{
-      $shortText = $this->getShortText($this->letterLimit, $text);
-      if ($this->isPartOfWord($this->letterLimit+1, $text))
-        $this->setNormalComplected($text, $shortText); 
-      return $shortText;
+    public function crop(&$srcText, &$destShortText){
+      $destShortText = $this->getShortText($this->letterLimit, $srcText);
+      if ($this->isPartOfWord($this->letterLimit+1, $srcText))
+        $this->setNormalComplected($srcText, $destShortText); 
     }
 
     private function setNormalComplected($text, &$shortText){
@@ -95,12 +94,12 @@ namespace Domain\Service{
   class ArticleDesigner implements IArticleDesigner{
     private $cutter;  
 
-    public function __construct(\Utility\ICutter $cutter){
+    public function __construct(\Tools\ICutter $cutter){
       $this->cutter = $cutter;
     }
     
     public function cropDescription(\Domain\Entity\Article $article){ 
-      $article->shortText = $this->cutter->cropText($article->description);
+      $this->cutter->crop($article->description, $article->shortText);
     }
 
     private function getLatestTwoWordInfo($shortText){
@@ -124,7 +123,7 @@ namespace {
     'http://fakenews.com/sport/2021-11-18/42',
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
   );
-  $cutter = new \Utility\DefaultCutter(180);
+  $cutter = new \Tools\DefaultCutter(180);
   $artDesigner = new \Domain\Service\ArticleDesigner($cutter);
   $artDesigner->cropDescription($article);
   $artDesigner->addLinkToShortText($article);
